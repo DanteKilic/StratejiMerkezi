@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DanteTips Takım Oluşturucu</title>
+    <style>
+        :root {
+            --bg: #0b0d10;
+            --card-bg: #161920;
+            --text-main: #e0e0e0;
+            
+            /* TÜM ELEMENT RENKLERİ */
+            --geo: #ffcc00;
+            --anemo: #33ffcc;
+            --pyro: #ff4d4d;   /* Ateş */
+            --cryo: #99ffff;   /* Buz */
+            --hydro: #00ccff;  /* Su */
+            --electro: #cc66ff;/* Elektrik */
+            --dendro: #99cc33; /* Doğa */
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, #1a202c 0%, #0b0d10 70%);
+            z-index: -1;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            margin-bottom: 15px;
+            box-shadow: 0 0 20px rgba(255,255,255,0.1);
+            object-fit: cover;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin: 0;
+            letter-spacing: 2px;
+            background: linear-gradient(to right, #fff, #aaa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p { color: #888; margin-top: 10px; }
+
+        .char-grid {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 1200px; /* Genişliği artırdım ki 4 kart sığsın */
+            padding: 20px;
+        }
+
+        .char-card {
+            width: 220px;
+            height: 320px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid #333;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* ELEMENT TEMALARI (Hover Efektleri) */
+        .char-card.geo:hover { border-color: var(--geo); box-shadow: 0 10px 30px rgba(255, 204, 0, 0.2); transform: translateY(-10px); }
+        .char-card.anemo:hover { border-color: var(--anemo); box-shadow: 0 10px 30px rgba(51, 255, 204, 0.2); transform: translateY(-10px); }
+        .char-card.pyro:hover { border-color: var(--pyro); box-shadow: 0 10px 30px rgba(255, 77, 77, 0.2); transform: translateY(-10px); }
+        .char-card.cryo:hover { border-color: var(--cryo); box-shadow: 0 10px 30px rgba(153, 255, 255, 0.2); transform: translateY(-10px); }
+        .char-card.hydro:hover { border-color: var(--hydro); box-shadow: 0 10px 30px rgba(0, 204, 255, 0.2); transform: translateY(-10px); }
+        .char-card.electro:hover { border-color: var(--electro); box-shadow: 0 10px 30px rgba(204, 102, 255, 0.2); transform: translateY(-10px); }
+        .char-card.dendro:hover { border-color: var(--dendro); box-shadow: 0 10px 30px rgba(153, 204, 51, 0.2); transform: translateY(-10px); }
+
+        .char-img {
+            width: 100%;
+            height: 70%;
+            object-fit: cover;
+            border-bottom: 1px solid #333;
+            transition: transform 0.4s;
+        }
+
+        .char-card:hover .char-img { transform: scale(1.05); }
+
+        .card-info { padding: 15px; text-align: center; width: 100%; }
+        .char-name { font-size: 1.2rem; font-weight: bold; display: block; margin-bottom: 5px; color: white; }
+        .char-title { font-size: 0.85rem; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+
+        .element-badge {
+            position: absolute;
+            top: 15px; right: 15px; width: 30px; height: 30px;
+            border-radius: 50%;
+            background: rgba(0,0,0,0.6);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 10px; font-weight: bold;
+            border: 1px solid rgba(255,255,255,0.2);
+            text-transform: uppercase;
+        }
+        
+        /* Badge Renkleri */
+        .geo .element-badge { color: var(--geo); border-color: var(--geo); }
+        .anemo .element-badge { color: var(--anemo); border-color: var(--anemo); }
+        .pyro .element-badge { color: var(--pyro); border-color: var(--pyro); }
+        .cryo .element-badge { color: var(--cryo); border-color: var(--cryo); }
+        .hydro .element-badge { color: var(--hydro); border-color: var(--hydro); }
+        .electro .element-badge { color: var(--electro); border-color: var(--electro); }
+        .dendro .element-badge { color: var(--dendro); border-color: var(--dendro); }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .footer { margin-top: 50px; font-size: 12px; color: #555; text-align: center; }
+        .footer a { color: #888; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <img src="https://yt3.googleusercontent.com/ytc/AIdro_k68k8z_s_s_s-c-k-c0x00ffffff-no-rj" alt="DanteTips" class="logo" onerror="this.src='https://placehold.co/80x80?text=DT'">
+        <h1>DANTE TIPS</h1>
+        <p>Genshin Impact Takım Strateji Merkezi</p>
+    </div>
+
+    <div class="char-grid">
+        
+        <a href="zibai.html" class="char-card geo fade-in" style="animation-delay: 0.1s;">
+            <div class="element-badge">Geo</div>
+            <img src="https://api.hakush.in/gi/UI/UI_AvatarIcon_Zibai.webp" alt="Zibai" class="char-img">
+            <div class="card-info">
+                <span class="char-name">ZIBAI</span>
+                <span class="char-title">Takım Sihirbazı</span>
+            </div>
+        </a>
+
+        <a href="varka.html" class="char-card anemo fade-in" style="animation-delay: 0.3s;">
+            <div class="element-badge">Anemo</div>
+            <img src="https://api.hakush.in/gi/UI/UI_AvatarIcon_Varka.webp" alt="Varka" class="char-img">
+            <div class="card-info">
+                <span class="char-name">VARKA</span>
+                <span class="char-title">Strateji Merkezi</span>
+            </div>
+        </a>
+
+        <a href="yeni_karakter.html" class="char-card Electro fade-in" style="animation-delay: 0.7s;">
+            <div class="element-badge">Electro</div>
+            <img src="https://placehold.co/220x220/99ffff/000?text=Yakında" alt="Yakında" class="char-img">
+            <div class="card-info">
+                <span class="char-name">YAKINDA</span>
+                <span class="char-title">Hazırlanıyor...</span>
+            </div>
+        </a>
+		
+		
+		 <a href="yeni_karakter.html" class="char-card dendro fade-in" style="animation-delay: 0.7s;">
+            <div class="element-badge">dendro</div>
+            <img src="https://placehold.co/220x220/99ffff/000?text=Yakında" alt="Yakında" class="char-img">
+            <div class="card-info">
+                <span class="char-name">YAKINDA</span>
+                <span class="char-title">Hazırlanıyor...</span>
+            </div>
+        </a>
+
+    </div>
+
+    <div class="footer">
+        Hazırlayan: <a href="https://www.youtube.com/@DanteTips" target="_blank">DanteTips Youtube Kanalı</a>
+    </div>
+
+</body>
+</html>
