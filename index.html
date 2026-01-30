@@ -10,14 +10,14 @@
             --card-bg: #161920;
             --text-main: #e0e0e0;
             
-            /* TÜM ELEMENT RENKLERİ */
+            /* ELEMENT RENKLERİ */
             --geo: #ffcc00;
             --anemo: #33ffcc;
-            --pyro: #ff4d4d;   /* Ateş */
-            --cryo: #99ffff;   /* Buz */
-            --hydro: #00ccff;  /* Su */
-            --electro: #cc66ff;/* Elektrik */
-            --dendro: #99cc33; /* Doğa */
+            --pyro: #ff4d4d;
+            --cryo: #99ffff;
+            --hydro: #00ccff;
+            --electro: #cc66ff;
+            --dendro: #99cc33; /* Fıstık Yeşili */
         }
 
         body {
@@ -44,8 +44,11 @@
 
         .header {
             text-align: center;
-            margin-bottom: 50px;
+            margin-bottom: 40px;
             animation: fadeInDown 1s ease-out;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .logo {
@@ -67,14 +70,47 @@
             -webkit-text-fill-color: transparent;
         }
 
-        p { color: #888; margin-top: 10px; }
+        p { color: #888; margin-top: 10px; margin-bottom: 15px; }
 
+        /* SAYAÇ STİLİ */
+        .counter-container {
+            padding: 6px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #333;
+            border-radius: 50px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s;
+            margin-top: 15px;
+        }
+
+        .counter-container:hover {
+            border-color: var(--geo);
+            background: rgba(255, 204, 0, 0.05);
+        }
+
+        .counter-label {
+            font-size: 11px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .counter-number {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--geo);
+            font-family: monospace;
+        }
+
+        /* GRID VE KARTLAR */
         .char-grid {
             display: flex;
             gap: 30px;
             flex-wrap: wrap;
             justify-content: center;
-            max-width: 1200px; /* Genişliği artırdım ki 4 kart sığsın */
+            max-width: 1200px;
             padding: 20px;
         }
 
@@ -94,7 +130,7 @@
             align-items: center;
         }
 
-        /* ELEMENT TEMALARI (Hover Efektleri) */
+        /* HOVER EFEKTLERİ (ÇERÇEVE RENKLERİ) */
         .char-card.geo:hover { border-color: var(--geo); box-shadow: 0 10px 30px rgba(255, 204, 0, 0.2); transform: translateY(-10px); }
         .char-card.anemo:hover { border-color: var(--anemo); box-shadow: 0 10px 30px rgba(51, 255, 204, 0.2); transform: translateY(-10px); }
         .char-card.pyro:hover { border-color: var(--pyro); box-shadow: 0 10px 30px rgba(255, 77, 77, 0.2); transform: translateY(-10px); }
@@ -117,6 +153,7 @@
         .char-name { font-size: 1.2rem; font-weight: bold; display: block; margin-bottom: 5px; color: white; }
         .char-title { font-size: 0.85rem; color: #888; text-transform: uppercase; letter-spacing: 1px; }
 
+        /* ROZET (BADGE) STİLİ */
         .element-badge {
             position: absolute;
             top: 15px; right: 15px; width: 30px; height: 30px;
@@ -128,14 +165,14 @@
             text-transform: uppercase;
         }
         
-        /* Badge Renkleri */
+        /* ROZET RENKLERİ (DÜZELTİLDİ) */
         .geo .element-badge { color: var(--geo); border-color: var(--geo); }
         .anemo .element-badge { color: var(--anemo); border-color: var(--anemo); }
         .pyro .element-badge { color: var(--pyro); border-color: var(--pyro); }
         .cryo .element-badge { color: var(--cryo); border-color: var(--cryo); }
         .hydro .element-badge { color: var(--hydro); border-color: var(--hydro); }
         .electro .element-badge { color: var(--electro); border-color: var(--electro); }
-        .dendro .element-badge { color: var(--dendro); border-color: var(--dendro); }
+        .dendro .element-badge { color: var(--dendro); border-color: var(--dendro); } /* Artık Yeşil! */
 
         @keyframes fadeInDown {
             from { opacity: 0; transform: translateY(-20px); }
@@ -152,8 +189,28 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .footer { margin-top: 50px; font-size: 12px; color: #555; text-align: center; }
-        .footer a { color: #888; text-decoration: none; }
+        .footer { 
+            margin-top: 50px; 
+            margin-bottom: 30px; 
+            font-size: 13px; 
+            color: #555; 
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .footer a { 
+            color: #ff3333;
+            text-decoration: none; 
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        
+        .footer a:hover {
+            color: #ff6666;
+            text-shadow: 0 0 10px rgba(255, 51, 51, 0.4);
+        }
     </style>
 </head>
 <body>
@@ -184,19 +241,20 @@
             </div>
         </a>
 
-        <a href="yeni_karakter.html" class="char-card Electro fade-in" style="animation-delay: 0.7s;">
-            <div class="element-badge">Electro</div>
-            <img src="https://placehold.co/220x220/99ffff/000?text=Yakında" alt="Yakında" class="char-img">
+      
+
+        <a href="#" class="char-card dendro fade-in" style="animation-delay: 0.7s;">
+            <div class="element-badge">Dendro</div>
+            <img src="https://placehold.co/220x220/99cc33/000?text=Yakında" alt="Yakında" class="char-img">
             <div class="card-info">
                 <span class="char-name">YAKINDA</span>
                 <span class="char-title">Hazırlanıyor...</span>
             </div>
         </a>
 		
-		
-		 <a href="yeni_karakter.html" class="char-card dendro fade-in" style="animation-delay: 0.7s;">
-            <div class="element-badge">dendro</div>
-            <img src="https://placehold.co/220x220/99ffff/000?text=Yakında" alt="Yakında" class="char-img">
+		<a href="#" class="char-card electro fade-in" style="animation-delay: 0.7s;">
+            <div class="element-badge">Electro</div>
+            <img src="https://placehold.co/220x220/99cc33/000?text=Yakında" alt="Yakında" class="char-img">
             <div class="card-info">
                 <span class="char-name">YAKINDA</span>
                 <span class="char-title">Hazırlanıyor...</span>
@@ -206,8 +264,36 @@
     </div>
 
     <div class="footer">
-        Hazırlayan: <a href="https://www.youtube.com/@DanteTips" target="_blank">DanteTips Youtube Kanalı</a>
+        <div>
+            Hazırlayan: <a href="https://www.youtube.com/@DanteTips" target="_blank">DanteTips Youtube Kanalı</a>
+        </div>
+        
+        <div class="counter-container">
+            <span class="counter-label">Toplam Ziyaret:</span>
+            <span id="visit-count" class="counter-number">...</span>
+        </div>
     </div>
+
+<script>
+    // --- ZİYARETÇİ SAYACI ---
+    function updateCounter() {
+        const countElement = document.getElementById('visit-count');
+        const namespace = "dantetips_site_stats"; 
+        const key = "main_page_visits";
+
+        fetch(`https://api.counterapi.dev/v1/${namespace}/${key}/up`)
+            .then(response => response.json())
+            .then(data => {
+                countElement.innerText = data.count.toLocaleString();
+            })
+            .catch(error => {
+                console.error("Sayaç hatası:", error);
+                countElement.innerText = "-";
+            });
+    }
+
+    document.addEventListener('DOMContentLoaded', updateCounter);
+</script>
 
 </body>
 </html>
