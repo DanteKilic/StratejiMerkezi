@@ -20,6 +20,8 @@
             --dendro: #99cc33; /* Fıstık Yeşili */
         }
 
+
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: var(--bg);
@@ -61,220 +63,274 @@
             object-fit: cover;
         }
 
+        
         h1 {
-            font-size: 2.5rem;
-            margin: 0;
-            letter-spacing: 2px;
-            background: linear-gradient(to right, #fff, #aaa);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            margin: 1px 0;
+            text-align: center;
         }
 
-        p { color: #888; margin-top: 10px; margin-bottom: 15px; }
-
-        /* SAYAÇ STİLİ */
-        .counter-container {
-            padding: 6px 16px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid #333;
-            border-radius: 50px;
+        h1 a {
+            font-family: 'Impact', 'Arial Narrow Bold', sans-serif;
+            font-size: 3rem;      /* Büyük ve etkileyici boyut */
+            color: #FF0000;         /* YouTube Kırmızısı */
+            text-decoration: none;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            transition: 0.3s;
-            margin-top: 15px;
+            gap: 15px;              /* Logo ile yazı arasındaki boşluk */
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-shadow: 4px 4px 0px #000; /* Thumbnail tarzı derinlik */
         }
 
-        .counter-container:hover {
-            border-color: var(--geo);
-            background: rgba(255, 204, 0, 0.05);
-        }
+/* YouTube Logosu (İkon) Stili */
+h1 a i {
+    font-size: 5rem;        /* Logoyu biraz daha büyük yapalım */
+    filter: drop-shadow(2px 2px 5px rgba(0,0,0,0.5));
+}
 
-        .counter-label {
-            font-size: 11px;
-            color: #888;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+/* MOUSE ÜZERİNE GELİNCE OLUŞACAK EFEKT */
+h1 a:hover {
+    color: #ffffff;         /* Yazı beyaza dönsün */
+    transform: scale(1.1) rotate(-1deg); /* Büyüme ve hafif eğilme */
+    text-shadow: 0 0 25px #FF0000, 5px 5px 0px #000; /* Kırmızı parlama */
+}
 
-        .counter-number {
-            font-size: 14px;
-            font-weight: bold;
-            color: var(--geo);
-            font-family: monospace;
-        }
+/* Logoya özel hover animasyonu */
+h1 a:hover i {
+    color: #FF0000;
+    animation: youtube-pulse 0.8s infinite;
+}
 
-        /* GRID VE KARTLAR */
-        .char-grid {
-            display: flex;
-            gap: 30px;
-            flex-wrap: wrap;
-            justify-content: center;
-            max-width: 1200px;
-            padding: 20px;
-        }
+/* Nabız Animasyonu */
+@keyframes youtube-pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
 
-        .char-card {
-            width: 220px;
-            height: 320px;
-            background: var(--card-bg);
-            border-radius: 20px;
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 1px solid #333;
-            text-decoration: none;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+/* MOBİL UYUMLULUK */
+@media (max-width: 600px) {
+    h1 a { font-size: 1.5rem; }
+    h1 a i { font-size: 2rem; }
+}
 
-        /* HOVER EFEKTLERİ (ÇERÇEVE RENKLERİ) */
-        .char-card.geo:hover { border-color: var(--geo); box-shadow: 0 10px 30px rgba(255, 204, 0, 0.2); transform: translateY(-10px); }
-        .char-card.anemo:hover { border-color: var(--anemo); box-shadow: 0 10px 30px rgba(51, 255, 204, 0.2); transform: translateY(-10px); }
-        .char-card.pyro:hover { border-color: var(--pyro); box-shadow: 0 10px 30px rgba(255, 77, 77, 0.2); transform: translateY(-10px); }
-        .char-card.cryo:hover { border-color: var(--cryo); box-shadow: 0 10px 30px rgba(153, 255, 255, 0.2); transform: translateY(-10px); }
-        .char-card.hydro:hover { border-color: var(--hydro); box-shadow: 0 10px 30px rgba(0, 204, 255, 0.2); transform: translateY(-10px); }
-        .char-card.electro:hover { border-color: var(--electro); box-shadow: 0 10px 30px rgba(204, 102, 255, 0.2); transform: translateY(-10px); }
-        .char-card.dendro:hover { border-color: var(--dendro); box-shadow: 0 10px 30px rgba(153, 204, 51, 0.2); transform: translateY(-10px); }
+p { color: #888; margin-top: 10px; margin-bottom: 15px; }
 
-        .char-img {
-            width: 100%;
-            height: 70%;
-            object-fit: cover;
-            border-bottom: 1px solid #333;
-            transition: transform 0.4s;
-        }
+/* SAYAÇ STİLİ */
+.counter-container {
+    padding: 6px 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid #333;
+    border-radius: 50px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: 0.3s;
+    margin-top: 15px;
+}
 
-        .char-card:hover .char-img { transform: scale(1.05); }
+.counter-container:hover {
+    border-color: var(--geo);
+    background: rgba(255, 204, 0, 0.05);
+}
 
-        .card-info { padding: 15px; text-align: center; width: 100%; }
-        .char-name { font-size: 1.2rem; font-weight: bold; display: block; margin-bottom: 5px; color: white; }
-        .char-title { font-size: 0.85rem; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+.counter-label {
+    font-size: 11px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
 
-        /* ROZET (BADGE) STİLİ */
-        .element-badge {
-            position: absolute;
-            top: 15px; right: 15px; width: 30px; height: 30px;
-            border-radius: 50%;
-            background: rgba(0,0,0,0.6);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 10px; font-weight: bold;
-            border: 1px solid rgba(255,255,255,0.2);
-            text-transform: uppercase;
-        }
-        
-        /* ROZET RENKLERİ (DÜZELTİLDİ) */
-        .geo .element-badge { color: var(--geo); border-color: var(--geo); }
-        .anemo .element-badge { color: var(--anemo); border-color: var(--anemo); }
-        .pyro .element-badge { color: var(--pyro); border-color: var(--pyro); }
-        .cryo .element-badge { color: var(--cryo); border-color: var(--cryo); }
-        .hydro .element-badge { color: var(--hydro); border-color: var(--hydro); }
-        .electro .element-badge { color: var(--electro); border-color: var(--electro); }
-        .dendro .element-badge { color: var(--dendro); border-color: var(--dendro); } /* Artık Yeşil! */
+.counter-number {
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--geo);
+    font-family: monospace;
+}
 
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+/* GRID VE KARTLAR */
+.char-grid {
+    display: flex;
+    gap: 30px;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 1200px;
+    padding: 20px;
+}
 
-        .fade-in {
-            animation: fadeIn 0.8s ease-out forwards;
-            opacity: 0;
-        }
+.char-card {
+    width: 220px;
+    height: 320px;
+    background: var(--card-bg);
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 1px solid #333;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+/* HOVER EFEKTLERİ (ÇERÇEVE RENKLERİ) */
+.char-card.geo:hover { border-color: var(--geo); box-shadow: 0 10px 30px rgba(255, 204, 0, 0.2); transform: translateY(-10px); }
+.char-card.anemo:hover { border-color: var(--anemo); box-shadow: 0 10px 30px rgba(51, 255, 204, 0.2); transform: translateY(-10px); }
+.char-card.pyro:hover { border-color: var(--pyro); box-shadow: 0 10px 30px rgba(255, 77, 77, 0.2); transform: translateY(-10px); }
+.char-card.cryo:hover { border-color: var(--cryo); box-shadow: 0 10px 30px rgba(153, 255, 255, 0.2); transform: translateY(-10px); }
+.char-card.hydro:hover { border-color: var(--hydro); box-shadow: 0 10px 30px rgba(0, 204, 255, 0.2); transform: translateY(-10px); }
+.char-card.electro:hover { border-color: var(--electro); box-shadow: 0 10px 30px rgba(204, 102, 255, 0.2); transform: translateY(-10px); }
+.char-card.dendro:hover { border-color: var(--dendro); box-shadow: 0 10px 30px rgba(153, 204, 51, 0.2); transform: translateY(-10px); }
 
-        .footer { 
-            margin-top: 50px; 
-            margin-bottom: 30px; 
-            font-size: 13px; 
-            color: #555; 
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        
-        .footer a { 
-            color: #ff3333;
-            text-decoration: none; 
-            font-weight: bold;
-            transition: 0.3s;
-        }
-        
-        .footer a:hover {
-            color: #ff6666;
-            text-shadow: 0 0 10px rgba(255, 51, 51, 0.4);
-        }
-    </style>
+.char-img {
+    width: 100%;
+    height: 70%;
+    object-fit: cover;
+    border-bottom: 1px solid #333;
+    transition: transform 0.4s;
+}
+
+.char-card:hover .char-img { transform: scale(1.05); }
+
+.card-info { padding: 15px; text-align: center; width: 100%; }
+.char-name { font-size: 1.2rem; font-weight: bold; display: block; margin-bottom: 5px; color: white; }
+.char-title { font-size: 0.85rem; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+
+/* ROZET (BADGE) STİLİ */
+.element-badge {
+    position: absolute;
+    top: 15px; right: 15px; width: 30px; height: 30px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.6);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: bold;
+    border: 1px solid rgba(255,255,255,0.2);
+    text-transform: uppercase;
+}
+
+/* ROZET RENKLERİ (DÜZELTİLDİ) */
+.geo .element-badge { color: var(--geo); border-color: var(--geo); }
+.anemo .element-badge { color: var(--anemo); border-color: var(--anemo); }
+.pyro .element-badge { color: var(--pyro); border-color: var(--pyro); }
+.cryo .element-badge { color: var(--cryo); border-color: var(--cryo); }
+.hydro .element-badge { color: var(--hydro); border-color: var(--hydro); }
+.electro .element-badge { color: var(--electro); border-color: var(--electro); }
+.dendro .element-badge { color: var(--dendro); border-color: var(--dendro); } /* Artık Yeşil! */
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+    animation: fadeIn 0.8s ease-out forwards;
+    opacity: 0;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.footer { 
+    margin-top: 50px; 
+    margin-bottom: 30px; 
+    font-size: 13px; 
+    color: #555; 
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.footer a { 
+    color: #ff3333;
+    text-decoration: none; 
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.footer a:hover {
+    color: #ff6666;
+    text-shadow: 0 0 10px rgba(255, 51, 51, 0.4);
+}
+</style>
 </head>
 <body>
 
     <div class="header">
         <img src="https://yt3.googleusercontent.com/ytc/AIdro_liA5t8kV7_Xjke6RZYFf3T42q-qFkU0sVG_jd4jNW6jEc=s900-c-k-c0x00ffffff-no-rj" alt="DanteTips" class="logo" onerror="this.src='https://placehold.co/80x80?text=DT'">
-        <h1>DANTE TIPS</h1>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+        <h1>
+            <a href="https://www.youtube.com/@DanteTips" target="_blank">
+                <i class="fab fa-youtube"></i> DANTE TIPS
+            </a>
+        </h1>
         <p>Genshin Impact Takım Strateji Merkezi</p>
     </div>
 
     <div class="char-grid">
-	
-		<a href="varka.html" class="char-card anemo fade-in" style="animation-delay: 0.1s;">
-            <div class="element-badge">Anemo</div>
-            <img src="https://api.hakush.in/gi/UI/UI_AvatarIcon_Varka.webp" alt="Varka" class="char-img">
-            <div class="card-info">
-                <span class="char-name">VARKA</span>
-                <span class="char-title">Strateji Merkezi</span>
-            </div>
-        </a>
-        
-        <a href="zibai.html" class="char-card geo fade-in" style="animation-delay: 0.3s;">
-            <div class="element-badge">Geo</div>
-            <img src="https://api.hakush.in/gi/UI/UI_AvatarIcon_Zibai.webp" alt="Zibai" class="char-img">
-            <div class="card-info">
-                <span class="char-name">ZIBAI</span>
-                <span class="char-title">Strateji Merkezi</span>
-            </div>
-        </a>
 
-        
+      <a href="varka.html" class="char-card anemo fade-in" style="animation-delay: 0.1s;">
+        <div class="element-badge">Anemo</div>
+        <img src="https://api.hakush.in/gi/UI/UI_AvatarIcon_Varka.webp" alt="Varka" class="char-img">
+        <div class="card-info">
+            <span class="char-name">VARKA</span>
+            <span class="char-title">Strateji Merkezi</span>
+        </div>
+    </a>
 
-      
+    <a href="zibai.html" class="char-card geo fade-in" style="animation-delay: 0.3s;">
+        <div class="element-badge">Geo</div>
+        <img src="https://api.hakush.in/gi/UI/UI_AvatarIcon_Zibai.webp" alt="Zibai" class="char-img">
+        <div class="card-info">
+            <span class="char-name">ZIBAI</span>
+            <span class="char-title">Strateji Merkezi</span>
+        </div>
+    </a>
 
-        <a href="nefer.html" class="char-card dendro fade-in" style="animation-delay: 0.5s;">
-            <div class="element-badge">Dendro</div>
-            <img src="https://api.hakush.in/gi/UI/UI_AvatarIcon_Nefer.webp" alt="Nefer" class="char-img">
-            <div class="card-info">
-                <span class="char-name">NEFER</span>
-                <span class="char-title">Strateji Merkezi</span>
-            </div>
-        </a>
-		
-		<a href="#" class="char-card electro fade-in" style="animation-delay: 0.7s;">
-            <div class="element-badge">Electro</div>
-            <img src="https://placehold.co/220x220/99cc33/000?text=Yakında" alt="Yakında" class="char-img">
-            <div class="card-info">
-                <span class="char-name">YAKINDA</span>
-                <span class="char-title">Hazırlanıyor...</span>
-            </div>
-        </a>
 
+
+    <a href="nefer.html" class="char-card dendro fade-in" style="animation-delay: 0.5s;">
+        <div class="element-badge">Dendro</div>
+        <img src="https://api.hakush.in/gi/UI/UI_AvatarIcon_Nefer.webp" alt="Nefer" class="char-img">
+        <div class="card-info">
+            <span class="char-name">NEFER</span>
+            <span class="char-title">Strateji Merkezi</span>
+        </div>
+    </a>
+
+    <a href="flins.html" class="char-card electro fade-in" style="animation-delay: 0.7s;">
+        <div class="element-badge">Electro</div>
+        <img src="https://api.hakush.in/gi/UI/UI_AvatarIcon_Flins.webp" alt="Flins" class="char-img">
+        <div class="card-info">
+            <span class="char-name">FLINS</span>
+            <span class="char-title">Strateji Merkezi</span>
+        </div>
+    </a>
+
+    <a href="#" class="char-card pyro fade-in" style="animation-delay: 0.9s;">
+        <div class="element-badge">pyro</div>
+        <img src="https://placehold.co/220x220/99cc33/000?text=Yakında" alt="Yakında" class="char-img">
+        <div class="card-info">
+            <span class="char-name">YAKINDA</span>
+            <span class="char-title">Karakter Öner</span>
+        </div>
+    </a>
+
+</div>
+
+<div class="footer">
+    <div>
+        Hazırlayan: <a href="https://www.youtube.com/@DanteTips" target="_blank">DanteTips Youtube Kanalı</a>
     </div>
 
-    <div class="footer">
-        <div>
-            Hazırlayan: <a href="https://www.youtube.com/@DanteTips" target="_blank">DanteTips Youtube Kanalı</a>
-        </div>
-        
-        <div class="counter-container">
-            <span class="counter-label">Toplam Ziyaret:</span>
-            <span id="visit-count" class="counter-number">...</span>
-        </div>
+    <div class="counter-container">
+        <span class="counter-label">Toplam Ziyaret:</span>
+        <span id="visit-count" class="counter-number">...</span>
     </div>
+</div>
 
 <script>
     // --- ZİYARETÇİ SAYACI ---
@@ -284,14 +340,14 @@
         const key = "main_page_visits";
 
         fetch(`https://api.counterapi.dev/v1/${namespace}/${key}/up`)
-            .then(response => response.json())
-            .then(data => {
-                countElement.innerText = data.count.toLocaleString();
-            })
-            .catch(error => {
-                console.error("Sayaç hatası:", error);
-                countElement.innerText = "-";
-            });
+        .then(response => response.json())
+        .then(data => {
+            countElement.innerText = data.count.toLocaleString();
+        })
+        .catch(error => {
+            console.error("Sayaç hatası:", error);
+            countElement.innerText = "-";
+        });
     }
 
     document.addEventListener('DOMContentLoaded', updateCounter);

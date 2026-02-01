@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Flins Strateji Merkezi | DanteTips</title>
+    <style>
+        :root { 
+            --electro: #cc66ff;
+            --electro-glow: rgba(204, 102, 255, 0.4);
+            --hydro: #2ea2e6;
+            --anemo: #33ffcc;
+            --geo: #ffcc00;
+            --bg: #0d0b14; 
+            --card: #1a1625; 
+            --gold: #ffcc00; 
+            --border: #2d263d;
+
+            /* Nefer'den Gelen Nadirlik Tasarımı */
+            --star5-bg: linear-gradient(135deg, #382e26 0%, #755b36 100%);
+            --star5-border: #bf8f47;
+            --star5-glow: rgba(191, 143, 71, 0.4);
+            --star4-bg: linear-gradient(135deg, #282636 0%, #564b7d 100%);
+            --star4-border: #8e78c9;
+            --star4-glow: rgba(142, 120, 201, 0.4);
+        }
+        
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: #e0e0e0; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; overflow-x: hidden; }
+        
+        .container { 
+            width: 100%; max-width: 950px; background: var(--card); padding: 30px; 
+            border-radius: 20px; box-shadow: 0 10px 60px rgba(0,0,0,0.8), 0 0 30px rgba(204, 102, 255, 0.1); 
+            border: 1px solid var(--border); position: relative; z-index: 1;
+        }
+        
+        .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid var(--border); padding-bottom: 20px; }
+        .logo-img { width: 85px; height: 85px; border-radius: 50%; border: 3px solid var(--electro); margin-bottom: 10px; background: #222; padding: 5px; object-fit: cover; box-shadow: 0 0 20px var(--electro); }
+        h1 { color: var(--electro); text-transform: uppercase; letter-spacing: 4px; margin: 0; text-shadow: 0 0 15px var(--electro-glow); font-size: 30px; }
+        .sub-link { color: #888; font-size: 14px; margin-top: 10px; }
+        .sub-link a { color: var(--gold); text-decoration: none; font-weight: bold; }
+
+        /* Grid Sistemi */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; margin-bottom: 25px; }
+        
+        .char-box { 
+            padding: 12px; border-radius: 12px; display: flex; align-items: center; gap: 15px; 
+            border: 1px solid #333; transition: 0.3s; position: relative;
+        }
+        .char-box:hover { transform: translateY(-3px); filter: brightness(1.2); }
+
+        .rarity-5 { background: var(--star5-bg); border-color: var(--star5-border); box-shadow: 0 4px 15px var(--star5-glow); }
+        .rarity-4 { background: var(--star4-bg); border-color: var(--star4-border); box-shadow: 0 4px 15px var(--star4-glow); }
+
+        .char-thumb { width: 65px; height: 65px; border-radius: 10px; background: rgba(0,0,0,0.4); object-fit: cover; border: 1px solid rgba(255,255,255,0.1); }
+        .char-info { flex-grow: 1; }
+        .char-name { font-weight: bold; font-size: 15px; display: block; margin-bottom: 6px; color: #fff; }
+        .healer-plus { color: #98e62e; font-weight: bold; margin-left: 5px; }
+        
+        select { background: rgba(0,0,0,0.7); color: white; border: 1px solid rgba(255,255,255,0.2); padding: 8px; border-radius: 6px; width: 100%; cursor: pointer; font-size: 13px; }
+
+        .healer-toggle {
+            background: rgba(204, 102, 255, 0.05);
+            padding: 20px; border-radius: 15px; margin-bottom: 20px;
+            display: flex; align-items: center; justify-content: center; gap: 20px;
+            border: 1px solid rgba(204, 102, 255, 0.2);
+        }
+        .toggle-text { font-weight: bold; font-size: 16px; }
+        .switch { position: relative; display: inline-block; width: 54px; height: 28px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #333; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--electro); }
+        input:checked + .slider:before { transform: translateX(26px); }
+
+        .btn { width: 100%; padding: 22px; background: linear-gradient(45deg, #cc66ff, #9933ff); border: none; border-radius: 15px; font-weight: bold; font-size: 20px; color: #fff; cursor: pointer; transition: 0.4s; text-transform: uppercase; letter-spacing: 2px; }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 25px var(--electro-glow); }
+
+        /* Sonuç ve Animasyon */
+        #result { margin-top: 40px; display: none; background: rgba(0,0,0,0.8); border: 2px solid var(--electro); border-radius: 25px; padding: 35px; }
+        .team-display { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        
+        .result-card { text-align: center; width: 150px; opacity: 0; position: relative; }
+        .result-img { width: 110px; height: 110px; border-radius: 20px; border: 4px solid #333; margin-bottom: 12px; object-fit: cover; box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+        .res-name { font-weight: bold; font-size: 16px; display: block; }
+        
+        .tips-section { margin-top: 30px; padding-top: 20px; border-top: 1px dashed #444; }
+        .tip-box { background: rgba(204, 102, 255, 0.05); border-left: 4px solid var(--electro); padding: 15px; margin-bottom: 12px; font-size: 14px; border-radius: 10px; }
+        .error-box { background: rgba(255, 107, 107, 0.1); border: 1px solid #ff6b6b; color: #ff6b6b; padding: 20px; border-radius: 10px; text-align: center; font-weight: bold; line-height: 1.6; }
+
+        .footer { margin-top: 50px; padding-top: 25px; border-top: 1px solid var(--border); text-align: center; color: #777; }
+        .counter-container { margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; background: rgba(0,0,0,0.3); padding: 10px 20px; border-radius: 50px; width: fit-content; margin-left: auto; margin-right: auto; }
+        .counter-number { color: var(--gold); font-weight: bold; font-family: monospace; font-size: 18px; }
+
+        @keyframes flyEffect { 
+            0% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.4); }
+            100% { opacity: 1; transform: translate(0, 0) scale(1); }
+        }
+        .anim-fly { animation: flyEffect 0.7s cubic-bezier(0.19, 1, 0.22, 1) forwards; }
+		
+		
+		/* Silah Önerileri Alanı */
+.weapon-section {
+    margin-top: 30px;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 15px;
+    border: 1px solid var(--border);
+}
+.weapon-title {
+    color: var(--gold);
+    font-size: 18px;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.weapon-list {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--electro) transparent;
+}
+.weapon-list::-webkit-scrollbar { height: 6px; }
+.weapon-list::-webkit-scrollbar-thumb { background: var(--electro); border-radius: 10px; }
+
+.weapon-card {
+    flex: 0 0 110px;
+    text-align: center;
+    border-radius: 10px;
+    padding: 8px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+.w-rarity-5 { background: var(--star5-bg); border-color: var(--star5-border); }
+.w-rarity-4 { background: var(--star4-bg); border-color: var(--star4-border); }
+
+.weapon-img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    margin-bottom: 5px;
+    filter: drop-shadow(0 4px 4px rgba(0,0,0,0.5));
+}
+.weapon-label {
+    font-size: 11px;
+    font-weight: bold;
+    color: #fff;
+    line-height: 1.2;
+    display: block;
+    height: 26px;
+    overflow: hidden;
+}
+
+.weapon-note {
+    display: block;
+    font-size: 9px; /* İsme göre daha küçük */
+    color: #aaa;   /* Biraz daha sönük gri/gümüş tonu */
+    margin-top: 2px;
+    font-style: italic;
+    line-height: 1.1;
+}
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <img src="https://api.hakush.in/gi/UI/UI_AvatarIcon_Flins.webp" alt="Flins" class="logo-img">
+        <h1>Flins Strateji Merkezi</h1>
+        <div class="sub-link">Hazırlayan: <a href="https://www.youtube.com/@DanteTips" target="_blank">DanteTips Youtube Kanalı</a></div>
+    </div>
+
+    <div class="grid" id="inputGrid"></div>
+
+    <div class="healer-toggle">
+        <span class="toggle-text">Takımda Healer <span style="color:#98e62e">+</span> İstiyor musun?</span>
+        <label class="switch">
+            <input type="checkbox" id="healerReq">
+            <span class="slider"></span>
+        </label>
+    </div>
+
+    <button id="actionBtn" class="btn" onclick="runAnalysis()">Takımı Analiz Et</button>
+
+    <div id="result">
+        <div class="team-display" id="teamDisplay"></div>
+        <div id="errorArea"></div>
+        <div class="tips-section" id="tipsArea"></div>
+    </div>
+
+    <div class="footer">
+	
+	<div class="weapon-section">
+    <div class="weapon-title">⚔️ Silah Sıralaması (En İyiden Kötüye)</div>
+    <div class="weapon-list">
+        <div class="weapon-card w-rarity-5">
+            <img src="https://api.hakush.in/gi/UI/UI_EquipIcon_Pole_TummaLyhty.webp" class="weapon-img" onerror="this.src='https://api.hakush.in/gi/UI/UI_EquipIcon_Pole_Deshret.webp'">
+            <span class="weapon-label">Kanlı Harabe</span>
+        </div>
+        <div class="weapon-card w-rarity-5">
+            <img src="https://api.hakush.in/gi/UI/UI_EquipIcon_Pole_Deshret.webp" class="weapon-img">
+            <span class="weapon-label">Kızıl Kumların Asası</span>
+        </div>
+        <div class="weapon-card w-rarity-5">
+            <img src="https://gi.yatta.moe/assets/UI/UI_EquipIcon_Pole_Perdix.png?vh=2024123000" class="weapon-img" onerror="this.src='https://api.hakush.in/gi/UI/UI_EquipIcon_Pole_Homa.webp'">
+            <span class="weapon-label">Kırık Hale</span>
+			<span class="weapon-note">Ineffa varsa , ineffaya tak bunu</span>
+        </div>
+        <div class="weapon-card w-rarity-5">
+            <img src="https://api.hakush.in/gi/UI/UI_EquipIcon_Pole_Homa.webp" class="weapon-img">
+            <span class="weapon-label">Homa Asası</span>
+        </div>
+        <div class="weapon-card w-rarity-5">
+            <img src="https://gi.yatta.moe/assets/UI/UI_EquipIcon_Pole_Trident.png?vh=2024123000" class="weapon-img" onerror="this.src='https://api.hakush.in/gi/UI/UI_EquipIcon_Pole_Muguet.webp'">
+            <span class="weapon-label">Aromaların Ezgisi</span>
+        </div>
+        <div class="weapon-card w-rarity-5">
+            <img src="https://api.hakush.in/gi/UI/UI_EquipIcon_Pole_Muguet.webp" class="weapon-img">
+            <span class="weapon-label">Lumidouce Ağıdı</span>
+        </div>
+        <div class="weapon-card w-rarity-5">
+            <img src="https://api.hakush.in/gi/UI/UI_EquipIcon_Pole_Morax.webp" class="weapon-img">
+            <span class="weapon-label">Yeşim Kanatlı Mızrak</span>
+        </div>
+       
+        <div class="weapon-card w-rarity-4">
+            <img src="https://gi.yatta.moe/assets/UI/UI_EquipIcon_Pole_Shanty.png?vh=2024123000" class="weapon-img">
+            <span class="weapon-label">Fiyortların Türküsü R5</span>
+        </div>
+		
+		 <div class="weapon-card w-rarity-5">
+            <img src="https://api.hakush.in/gi/UI/UI_EquipIcon_Pole_Narukami.webp" class="weapon-img">
+            <span class="weapon-label">Hapseden Yıldırım</span>
+        </div>
+
+        <div class="weapon-card w-rarity-4">
+            <img src="https://api.hakush.in/gi/UI/UI_EquipIcon_Pole_Gladiator.webp" class="weapon-img">
+            <span class="weapon-label">Ölümsaçan R5</span>
+        </div>
+        <div class="weapon-card w-rarity-4">
+            <img src="https://gi.yatta.moe/assets/UI/UI_EquipIcon_Pole_Mechanic.png?vh=2024123000" class="weapon-img">
+            <span class="weapon-label">Madenci Kazması R5</span>
+        </div>
+    </div>
+</div>
+	
+        Düşüncelerini YouTube kanalıma yorum olarak bırakabilirsin.
+        <br>
+        <div class="counter-container">
+            <span class="counter-label">Toplam Etkileşim:</span>
+            <span id="interaction-count" class="counter-number">...</span>
+        </div>
+    </div>
+</div>
+
+<script>
+const _0x4add5c=_0x1a01;(function(_0x21e09d,_0x183700){const _0x465609=_0x1a01,_0x430fec=_0x21e09d();while(!![]){try{const _0x1753a9=-parseInt(_0x465609(0x120))/(0x6*0x313+0x11*0x1b1+-0x2*0x1799)*(-parseInt(_0x465609(0x12d))/(0x25fb+-0x7*0x559+0x6*-0x17))+parseInt(_0x465609(0x1e4))/(-0x2268+-0x2b*0x13+0x259c)+parseInt(_0x465609(0x1f1))/(0x19a0+-0x1*0xc87+-0xd15*0x1)*(-parseInt(_0x465609(0x183))/(-0x75*-0x6+0x3a*0xac+0x29b1*-0x1))+parseInt(_0x465609(0x107))/(0xc8d+-0x24f9+0xc39*0x2)+-parseInt(_0x465609(0x179))/(0x1924+0x165*-0x10+-0x2cd)*(-parseInt(_0x465609(0x102))/(0x1f*-0x26+0x35*0x5e+-0xed4*0x1))+-parseInt(_0x465609(0x137))/(0x1c*-0x139+0xebd+0x271*0x8)+parseInt(_0x465609(0x106))/(0x9f1*-0x2+0x5eb*-0x3+0x25ad);if(_0x1753a9===_0x183700)break;else _0x430fec['push'](_0x430fec['shift']());}catch(_0x483324){_0x430fec['push'](_0x430fec['shift']());}}}(_0x48b9,-0x38b99+-0x1bbf79+0x2e063a));function _0x48b9(){const _0x3950ed=['ZZGJK','Su\x20karakte','lqtlF','sel_','Şifacı\x20ist','ğıt\x22\x20olmal','in\x20\x22Gök\x20Yü','\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','artırmaz.\x20','\x22\x20onerror=','İpeksi\x20Ay\x22','en\x22\x20yapman','sKylU','Pvjgc','\x20\x20\x20\x20\x20\x20','Jahoda','<span\x20clas','\x22\x20class=\x22r','ffa,\x20Colum','ır.</div>','a\x20ve\x20Colum','ayı\x20unutma','a.webp','ımın\x20şifa\x20','Furina\x20var','Columbina','var(--hydr','arakter\x20se','\x20karakter\x20','dir.</div>','acehold.co','catch','ahoda\x20gere','etini\x20kuşa','div\x20class=','\x20setini\x20ku','display','NSoYf','style','Flins','çilmedi.','dLNEY','Kuki\x20Shino','rder-color','ur.','xilonen','Hydro','</option>','\x22\x20src=\x22','src_img_','AoiQi','\x20\x20\x20\x20\x20\x20\x20</s','pdWIz','main_page_','n/gi/UI/UI','ız\x20önerili','yelan','arakterin\x20','3641655yrCBQl','</b>\x20En\x20iy','site_stats','rose\x27dan\x20h','.</div>','><b>Ineffa','eHcGv','o/110x110/','sa\x20takımda','xingqiu','tarafında\x20','><b>Aino:<','Elinizdeki','1518096SjmXPq','eal\x20seçim\x20','\x20\x20\x20\x20\x20\x20\x20\x20\x20<','nmalıdır.\x20','avonius\x20ya','--dy','pan>','a\x20karşılar','find','\x20\x20\x20','Yok','/b>\x20Ultisi','b>dikkat:<','appendChil','udur.\x20Rota','eri\x22\x20silah','onius\x20veya','=\x22tip-box\x22','n_Jahoda.w','getElement','length','setPropert','ilir.\x20Sade','222/white?','\x20\x20\x20\x20\x20\x20<spa','Aino','block','har-name\x22>','JvAex','llanabilir','Electro','dantetips_','<h3>Lunarc','anim-fly','\x22this.src=','\x20takım\x20kur','add','pgvER','div','a,\x20Ineffa\x20','i.hakush.i','oAnMd','iniz.\x20(Not','ması\x20şartt','tkili\x20bir\x20','lan\x204\x20parç','ksik.\x20(Ine','övülen\x22\x20ku','ar-info\x22>\x0a','yı\x20verileb','classList','\x20Yüklemesi','I!<br>','><b>C6\x20Jah','direncini\x20','hYjJr','Furina','json','harge\x20Stra','i\x20parçasın','kli)','/70x70/222','join','https://ap','peksi\x20Ay\x22\x20','checked','/b>\x20Silah\x20','olarak\x20Fav','webp','/up','n_Columbin','gROal','det\x20Hydro\x20','this.src=\x27','n_Ineffa.w',':\x20Kum\x20saat','iTSWx','kıma\x20buff\x20','ı\x20zorunlud','ayı\x20\x22Eğitm','rLCtY','eAvhC','s=\x22healer-','cı\x20(Healer','mutlaka\x20\x22İ','emen\x20sonra','canHeal','elementin\x20','ar\x20ancak\x20<','</div>','\x20style=\x22bo','etersiz.','ddqtv','gerekli)','currentVal','tro)','ent','count','c=\x22','n-count','YeZJV','n_Aino.web','fOYCr','sucrose','\x22char-box\x20','zü\x20Duvağı\x22','n_Xingqiu.','eti\x20zorunl','akter\x20vars','Sucrose','Furina\x20içi','karakteri\x20','bina,\x20Aino','/white?tex','k\x20önceliği','kuki','\x20hasarını\x20','--dx','arakteri\x20e','ımda\x20bir\x20k',')\x20bulunmas','aZArR','n\x20class=\x22r','push','reduce','yCXmg','ZUAzW','ebp','/div>\x0a\x20\x20\x20\x20','flins','Server\x20Err','n\x20bir\x20şifa','i\x20hasar\x20iç','gClientRec','TOsxZ','ir.</div>','YUKxW','kırarak\x20Fl','ri\x20eksik.\x20','Anemo','\x20class=\x22ch','forEach','\x0a\x20\x20\x20\x20','mak\x20için\x20y','furina','lacehold.c','element','ü\x20su\x20uygul','n_Shinobu.',':</b>\x20Eğer','ndeki\x20hasa','irme\x20özell','llanan\x20baş','n_Yelan.we','teamDispla','\x22>\x0a\x20\x20\x20\x20\x20\x20\x20','rarity-','healerReq','ka\x20bir\x20kar',':</b>\x20Güçl','saVgR','options','\x20yadigar\x20s','XCDhL','QLhbf','\x20takımda\x20e','BZsrg','ce\x20C6\x20sevi','value','mgZqw','8FZTncR','WZNzR','n_Furina.w','lı\x20\x22Enerji','1560460DaMFwT','584760FvfYIq','n\x20class=\x22c','ftUWl','map','n:</b>\x20Ayn','\x22Eğitmen\x22\x20','için\x20en\x20id','wSema','\x20\x20\x20\x20<selec','dGhpA','Fischl','t\x20id=\x22sel_','ineffa','reluA','\x20şifacı\x20ol','innerText','Var','then','asarını\x20ar','RjLfs','dızı\x22\x20seti','\x20tek\x20başın','den\x20fazla\x20','unarcharge','errorArea','154GDwzYt','val','(En\x20az\x201\x20a','isNodKrai','syonda\x20Suc','visits','\x22\x20seçip\x20ka','\x20\x20\x20\x20</div>','plus\x22>+</s','fbXmm','Nod-krai\x20k','KVNta','</span>\x0a\x20\x20','21322piCxVN','tcbgU','LZDvi','der\x20Katill','rarity','var(--elec','score','Xilonen','yesinde\x20bu','><b>Xilone','10616922kCoRbx','pi.dev/v1/','unu\x20aktarm','lue=\x22','\x27https://p','teji\x20Notla','mkUyi','createElem','e:</b>\x20\x22Ej','left','dtEJZ','some','\x22\x20class=\x22c','\x20\x20\x20\x20\x20<img\x20','ı\x20anda\x20bir','><b>Flins:','id=\x22src_im','Ayrıca\x20tak','aması\x20sağl','emin\x20olun.','verebilirs','name','r.)</div>','rol\x20üstlen','jzopj','ı,\x20yoksa\x20F','\x20\x20\x20\x20\x20\x20<div','\x0a\x20\x20\x20\x20\x20\x20\x20\x20<','Yelan','ıdığından\x20','ı\x20ve\x20\x22Yeşi','\x20\x20\x20<img\x20sr','dırı\x20bonus','tipsArea','img','i.countera','innerHTML','\x27\x22>\x0a\x20\x20\x20\x20\x20\x20','className','getBoundin','AZtVM','sayısı\x204\x20k','x\x22>⚠️\x20TAKIM','.\x20Yadigar\x20','PejLh','elect>\x0a\x20\x20\x20','var(--geo)','n_Sucrose.','aino','fischl','ak\x20iyileşt','opacity','rı</h3>','jahoda','r\x20bonusu\x20L','Geo','tırır.\x20Tak','<option\x20va','><b>Furina','uLkhT','ı\x205\x20yıldız','result','n_Flins.we','setini\x20taş','gWdce','result-car','6534563hDyhzS','><b>Sucros','niz\x20\x22Son\x20A','https://pl','\x22Seher\x20Yıl','aPBgr','har-thumb\x22','oda:</b>\x20S','interactio','jMvYb','25ewgZBX','\x20KURULAMAD','n_Xilonen.','\x20Flins\x27e\x20g','ilah\x20olara','_AvatarIco','top','es-name\x22>','=\x22error-bo','bina\x27nın\x20h','işilik\x20bir','text=','\x20veya\x20C6\x20J','ring','Xingqiu','ihtiyacını','iği\x20olan\x20k','yın.</div>','l\x20Gölge\x22\x20s','columbina','setiyle\x20ta','\x20takımda\x20\x22','eçerek\x20sal','Ineffa','ins,\x20Ineff','\x20\x22Ateşte\x20D','eniyor\x20anc','var(--anem','\x20onerror=\x22','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20','inputGrid','AymGf','toLocaleSt','<div\x20class','esult-img\x22','KIEyw','n_Fischl.w','QBNjl','ById'];_0x48b9=function(){return _0x3950ed;};return _0x48b9();}function _0x1a01(_0x5c7d80,_0x4ac39a){_0x5c7d80=_0x5c7d80-(-0x15*-0x3d+-0x13*-0x23+0x5*-0x16d);const _0x2bcee=_0x48b9();let _0x5b5c0e=_0x2bcee[_0x5c7d80];return _0x5b5c0e;}const flinsImg=_0x4add5c(0x97)+_0x4add5c(0x80)+_0x4add5c(0x1e0)+_0x4add5c(0x188)+_0x4add5c(0x175)+'bp',charData=[{'id':_0x4add5c(0x113),'name':_0x4add5c(0x19a),'rarity':0x5,'element':_0x4add5c(0x20f),'isNodKrai':!![],'canHeal':![],'options':[_0x4add5c(0x1fb),_0x4add5c(0x117)],'img':_0x4add5c(0x97)+_0x4add5c(0x80)+_0x4add5c(0x1e0)+_0x4add5c(0x188)+_0x4add5c(0xa2)+_0x4add5c(0xd7)},{'id':_0x4add5c(0x196),'name':_0x4add5c(0x1c3),'rarity':0x5,'element':_0x4add5c(0x1d8),'isNodKrai':!![],'canHeal':![],'options':[_0x4add5c(0x1fb),_0x4add5c(0x117)],'img':_0x4add5c(0x97)+_0x4add5c(0x80)+_0x4add5c(0x1e0)+_0x4add5c(0x188)+_0x4add5c(0x9e)+_0x4add5c(0x1c0)},{'id':_0x4add5c(0xbf),'name':_0x4add5c(0xc5),'rarity':0x4,'element':_0x4add5c(0xe3),'isNodKrai':![],'canHeal':![],'options':[_0x4add5c(0x1fb),_0x4add5c(0x117)],'img':_0x4add5c(0x97)+_0x4add5c(0x80)+_0x4add5c(0x1e0)+_0x4add5c(0x188)+_0x4add5c(0x166)+_0x4add5c(0x9c)},{'id':_0x4add5c(0x167),'name':_0x4add5c(0x20a),'rarity':0x4,'element':_0x4add5c(0x1d8),'isNodKrai':!![],'canHeal':![],'options':['C0','C2','C6'],'img':_0x4add5c(0x97)+_0x4add5c(0x80)+_0x4add5c(0x1e0)+_0x4add5c(0x188)+_0x4add5c(0xbd)+'p'},{'id':_0x4add5c(0x16c),'name':_0x4add5c(0x1b9),'rarity':0x4,'element':_0x4add5c(0xe3),'isNodKrai':![],'canHeal':!![],'options':[_0x4add5c(0x1fb),'C6'],'img':_0x4add5c(0x97)+_0x4add5c(0x80)+_0x4add5c(0x1e0)+_0x4add5c(0x188)+_0x4add5c(0x203)+_0x4add5c(0xd7)},{'id':_0x4add5c(0x1d7),'name':_0x4add5c(0x134),'rarity':0x5,'element':_0x4add5c(0x16e),'isNodKrai':![],'canHeal':!![],'options':[_0x4add5c(0x1fb),_0x4add5c(0x117)],'img':_0x4add5c(0x97)+_0x4add5c(0x80)+_0x4add5c(0x1e0)+_0x4add5c(0x188)+_0x4add5c(0x185)+_0x4add5c(0x9c)},{'id':_0x4add5c(0xe8),'name':_0x4add5c(0x90),'rarity':0x5,'element':_0x4add5c(0x1d8),'isNodKrai':![],'canHeal':![],'options':[_0x4add5c(0x1fb),_0x4add5c(0x117)],'img':_0x4add5c(0x97)+_0x4add5c(0x80)+_0x4add5c(0x1e0)+_0x4add5c(0x188)+_0x4add5c(0x104)+_0x4add5c(0xd7)},{'id':_0x4add5c(0xcb),'name':_0x4add5c(0x1d4)+'bu','rarity':0x4,'element':_0x4add5c(0x20f),'isNodKrai':![],'canHeal':!![],'options':[_0x4add5c(0x1fb),_0x4add5c(0x117)],'img':_0x4add5c(0x97)+_0x4add5c(0x80)+_0x4add5c(0x1e0)+_0x4add5c(0x188)+_0x4add5c(0xec)+_0x4add5c(0x9c)},{'id':_0x4add5c(0x1e2),'name':_0x4add5c(0x153),'rarity':0x5,'element':_0x4add5c(0x1d8),'isNodKrai':![],'canHeal':![],'options':[_0x4add5c(0x1fb),_0x4add5c(0x117)],'img':_0x4add5c(0x97)+_0x4add5c(0x80)+_0x4add5c(0x1e0)+_0x4add5c(0x188)+_0x4add5c(0xf1)+'bp'},{'id':_0x4add5c(0x168),'name':_0x4add5c(0x111),'rarity':0x4,'element':_0x4add5c(0x20f),'isNodKrai':![],'canHeal':![],'options':[_0x4add5c(0x1fb),_0x4add5c(0x117)],'img':_0x4add5c(0x97)+_0x4add5c(0x80)+_0x4add5c(0x1e0)+_0x4add5c(0x188)+_0x4add5c(0x1a7)+_0x4add5c(0xd7)},{'id':_0x4add5c(0x1ed),'name':_0x4add5c(0x191),'rarity':0x4,'element':_0x4add5c(0x1d8),'isNodKrai':![],'canHeal':![],'options':[_0x4add5c(0x1fb),_0x4add5c(0x117)],'img':_0x4add5c(0x97)+_0x4add5c(0x80)+_0x4add5c(0x1e0)+_0x4add5c(0x188)+_0x4add5c(0xc2)+_0x4add5c(0x9c)}],priorityOrder=[{'id':_0x4add5c(0x113),'val':_0x4add5c(0x117)},{'id':_0x4add5c(0x196),'val':_0x4add5c(0x117)},{'id':_0x4add5c(0xbf),'val':_0x4add5c(0x117)},{'id':_0x4add5c(0x167),'val':'C6'},{'id':_0x4add5c(0x16c),'val':'C6'},{'id':_0x4add5c(0x167),'val':'C2'},{'id':_0x4add5c(0x1d7),'val':_0x4add5c(0x117)},{'id':_0x4add5c(0xe8),'val':_0x4add5c(0x117)},{'id':_0x4add5c(0xcb),'val':_0x4add5c(0x117)},{'id':_0x4add5c(0x1e2),'val':_0x4add5c(0x117)},{'id':_0x4add5c(0x168),'val':_0x4add5c(0x117)},{'id':_0x4add5c(0x167),'val':'C0'},{'id':_0x4add5c(0x1ed),'val':_0x4add5c(0x117)}];function init(){const _0x4d1a7d=_0x4add5c,_0x1a4242={'iTSWx':_0x4d1a7d(0x1a1),'WZNzR':function(_0x43f6b3,_0x143272){return _0x43f6b3(_0x143272);}},_0x24bc6f=document[_0x4d1a7d(0x204)+_0x4d1a7d(0x1a9)](_0x1a4242[_0x4d1a7d(0xa4)]);_0x24bc6f[_0x4d1a7d(0x15b)]=charData[_0x4d1a7d(0x10a)](_0x213267=>_0x4d1a7d(0x152)+_0x4d1a7d(0x1cc)+_0x4d1a7d(0xc0)+_0x4d1a7d(0xf4)+_0x213267[_0x4d1a7d(0x131)]+(_0x4d1a7d(0xf3)+_0x4d1a7d(0x144)+_0x4d1a7d(0x147)+'g_')+_0x213267['id']+_0x4d1a7d(0x1da)+_0x213267[_0x4d1a7d(0x159)]+(_0x4d1a7d(0x143)+_0x4d1a7d(0x17f)+_0x4d1a7d(0x19f)+_0x4d1a7d(0xa1)+_0x4d1a7d(0x17c)+_0x4d1a7d(0x1c8)+_0x4d1a7d(0x95)+_0x4d1a7d(0xc9)+'t=')+_0x213267[_0x4d1a7d(0x14c)][0x1a08+-0x4*-0x38f+-0x1422*0x2]+(_0x4d1a7d(0x15c)+_0x4d1a7d(0x151)+_0x4d1a7d(0xe4)+_0x4d1a7d(0x88)+_0x4d1a7d(0x1b1)+_0x4d1a7d(0x209)+_0x4d1a7d(0x108)+_0x4d1a7d(0x20c))+_0x213267[_0x4d1a7d(0x14c)]+'\x20'+(_0x213267[_0x4d1a7d(0xae)]?_0x4d1a7d(0x1ba)+_0x4d1a7d(0xaa)+_0x4d1a7d(0x128)+_0x4d1a7d(0x1f7):'')+(_0x4d1a7d(0x12c)+_0x4d1a7d(0x1b1)+_0x4d1a7d(0x10f)+_0x4d1a7d(0x112))+_0x213267['id']+(_0x4d1a7d(0xf3)+_0x4d1a7d(0x1b1)+_0x4d1a7d(0x1fa))+_0x213267[_0x4d1a7d(0xf9)][_0x4d1a7d(0x10a)](_0x33a78b=>_0x4d1a7d(0x170)+_0x4d1a7d(0x13a)+_0x33a78b+'\x22>'+_0x33a78b+_0x4d1a7d(0x1d9))[_0x4d1a7d(0x96)]('')+(_0x4d1a7d(0x1a0)+_0x4d1a7d(0x1dd)+_0x4d1a7d(0x164)+_0x4d1a7d(0x1f3)+_0x4d1a7d(0xd8)+_0x4d1a7d(0x127)+_0x4d1a7d(0xe6)))[_0x4d1a7d(0x96)](''),_0x1a4242[_0x4d1a7d(0x103)](updateCounter,!![]);}function runAnalysis(){const _0x373542=_0x4add5c,_0x310d4d={'AymGf':function(_0x232e42,_0x2dbf61){return _0x232e42===_0x2dbf61;},'tcbgU':function(_0x1b04c1,_0x5b3275){return _0x1b04c1===_0x5b3275;},'AoiQi':_0x373542(0x117),'oAnMd':function(_0x54fac0,_0x461fe8){return _0x54fac0!==_0x461fe8;},'ftUWl':_0x373542(0x1fb),'KVNta':_0x373542(0xf5),'fOYCr':function(_0x238a75,_0x256bdd){return _0x238a75<_0x256bdd;},'KIEyw':function(_0x4246c8,_0x33314a){return _0x4246c8+_0x33314a;},'JvAex':function(_0x2ec275,_0x1bed3c){return _0x2ec275<_0x1bed3c;},'pgvER':_0x373542(0x12a)+_0x373542(0xce)+_0x373542(0x86)+_0x373542(0x1bc)+_0x373542(0xc8)+_0x373542(0x18f)+_0x373542(0x1ca)+_0x373542(0x94),'RjLfs':_0x373542(0x1ab)+_0x373542(0xe2)+_0x373542(0x122)+_0x373542(0xa0)+_0x373542(0xc7)+_0x373542(0xb5),'uLkhT':function(_0x708af3,_0x5539f7){return _0x708af3&&_0x5539f7;},'ddqtv':_0x373542(0x1ae)+_0x373542(0x19d)+_0x373542(0x169)+_0x373542(0xef)+_0x373542(0x193)+_0x373542(0x1c5)+_0x373542(0x1d2),'ZUAzW':_0x373542(0xc6)+_0x373542(0xdb)+_0x373542(0xab)+_0x373542(0xd0)+_0x373542(0xa6)+_0x373542(0x1d6),'Pvjgc':function(_0x4612a1,_0x5c113b){return _0x4612a1<_0x5c113b;},'fbXmm':function(_0x74e7dc,_0x53a0f5){return _0x74e7dc<_0x53a0f5;},'BZsrg':_0x373542(0x1f0)+_0x373542(0x1c6)+_0x373542(0x160)+_0x373542(0x18d)+_0x373542(0x7b)+_0x373542(0xe7)+_0x373542(0xb3),'eAvhC':function(_0x14678a,_0x2b657d,_0x2c341a){return _0x14678a(_0x2b657d,_0x2c341a);},'yCXmg':function(_0x4c2362,_0x17a872){return _0x4c2362(_0x17a872);}},_0x870adb=document[_0x373542(0x204)+_0x373542(0x1a9)](_0x310d4d[_0x373542(0x12b)])[_0x373542(0x99)],_0x165c82={};charData[_0x373542(0xe5)](_0x9e24a9=>_0x165c82[_0x9e24a9['id']]=document[_0x373542(0x204)+_0x373542(0x1a9)](_0x373542(0x1ad)+_0x9e24a9['id'])[_0x373542(0x100)]);let _0x66a8c3=[];priorityOrder[_0x373542(0xe5)]((_0x4cd2af,_0x4eeb47)=>{const _0xdbefd3=_0x373542,_0x1a2a10=_0x165c82[_0x4cd2af['id']];if(_0x310d4d[_0xdbefd3(0x1a2)](_0x1a2a10,_0x4cd2af[_0xdbefd3(0x121)])||_0x310d4d[_0xdbefd3(0x12e)](_0x4cd2af[_0xdbefd3(0x121)],_0x310d4d[_0xdbefd3(0x1dc)])&&_0x310d4d[_0xdbefd3(0x81)](_0x1a2a10,_0x310d4d[_0xdbefd3(0x109)])){if(!_0x66a8c3[_0xdbefd3(0x1f9)](_0x5677b6=>_0x5677b6['id']===_0x4cd2af['id'])){const _0x156b5a=charData[_0xdbefd3(0x1f9)](_0x4c8e0b=>_0x4c8e0b['id']===_0x4cd2af['id']);_0x66a8c3[_0xdbefd3(0xd3)]({..._0x156b5a,'currentVal':_0x1a2a10,'score':_0x4eeb47});}}});let _0x5d7132=null,_0x214bb0=Infinity,_0x2dc4d9='';for(let _0xf386b2=-0x19bd+0xfa2+-0x1*-0xa1b;_0x310d4d[_0x373542(0xbe)](_0xf386b2,_0x66a8c3[_0x373542(0x205)]);_0xf386b2++){for(let _0x1a3d82=_0x310d4d[_0x373542(0x1a6)](_0xf386b2,0xb*0x6b+-0x3e3+-0xb5);_0x310d4d[_0x373542(0x20d)](_0x1a3d82,_0x66a8c3[_0x373542(0x205)]);_0x1a3d82++){for(let _0x3daf2b=_0x310d4d[_0x373542(0x1a6)](_0x1a3d82,0x1795+-0xde9*-0x1+0x15*-0x1c9);_0x310d4d[_0x373542(0x20d)](_0x3daf2b,_0x66a8c3[_0x373542(0x205)]);_0x3daf2b++){const _0xf28516=[_0x66a8c3[_0xf386b2],_0x66a8c3[_0x1a3d82],_0x66a8c3[_0x3daf2b]],_0x2dbf90=_0xf28516[_0x373542(0x142)](_0x466db2=>_0x466db2[_0x373542(0x123)]||_0x466db2['id']===_0x373542(0x16c)&&_0x466db2[_0x373542(0xb6)]==='C6'),_0x457ec0=_0xf28516[_0x373542(0x142)](_0x2cad1b=>_0x2cad1b[_0x373542(0xea)]===_0x373542(0x1d8)),_0x2a591f=_0xf28516[_0x373542(0x142)](_0x454f03=>_0x454f03[_0x373542(0xae)]||_0x454f03['id']===_0x373542(0x16c)&&_0x454f03[_0x373542(0xb6)]==='C6'),_0x13af08=_0xf28516[_0x373542(0x142)](_0x3b91f9=>_0x3b91f9['id']===_0x373542(0xe8));if(!_0x2dbf90){_0x2dc4d9=_0x310d4d[_0x373542(0x7d)];continue;}if(!_0x457ec0){_0x2dc4d9=_0x310d4d[_0x373542(0x11a)];continue;}if(_0x310d4d[_0x373542(0x172)](_0x870adb,!_0x2a591f)){_0x2dc4d9=_0x310d4d[_0x373542(0xb4)];continue;}if(_0x310d4d[_0x373542(0x172)](_0x13af08,!_0x2a591f)){_0x2dc4d9=_0x310d4d[_0x373542(0xd6)];continue;}let _0x1771a3=_0xf28516[_0x373542(0xd4)]((_0x3ba52d,_0x2e5b91)=>_0x3ba52d+_0x2e5b91[_0x373542(0x133)],-0x33*-0x56+-0x1a66+0x944);_0x310d4d[_0x373542(0x1b7)](_0x1771a3,_0x214bb0)&&(_0x214bb0=_0x1771a3,_0x5d7132=_0xf28516);}}}if(!_0x5d7132&&_0x310d4d[_0x373542(0x129)](_0x66a8c3[_0x373542(0x205)],-0x22ab+0x1e52+0x22e*0x2))_0x2dc4d9=_0x310d4d[_0x373542(0xfe)];_0x310d4d[_0x373542(0xa9)](render,_0x5d7132,_0x2dc4d9),_0x310d4d[_0x373542(0xd5)](updateCounter,!![]);}function render(_0xd1ed9d,_0x314c2d){const _0x52e16c=_0x4add5c,_0x54b094={'mgZqw':function(_0x3e05a3,_0x2bf2d5){return _0x3e05a3===_0x2bf2d5;},'NSoYf':_0x52e16c(0x20f),'YeZJV':_0x52e16c(0x132)+_0x52e16c(0xb7),'gWdce':_0x52e16c(0x1d8),'rLCtY':_0x52e16c(0x1c4)+'o)','ZZGJK':function(_0x4440f5,_0x23ca96){return _0x4440f5===_0x23ca96;},'aPBgr':_0x52e16c(0xe3),'mkUyi':_0x52e16c(0x19e)+'o)','dGhpA':_0x52e16c(0x165),'eHcGv':_0x52e16c(0x7e),'saVgR':_0x52e16c(0x178)+'d','YUKxW':_0x52e16c(0xd9),'wSema':function(_0x1ea67d,_0x482912){return _0x1ea67d-_0x482912;},'hYjJr':function(_0x5b2223,_0x1bbafc){return _0x5b2223-_0x1bbafc;},'jMvYb':_0x52e16c(0xcd),'sKylU':_0x52e16c(0x1f6),'lqtlF':function(_0x3aa215,_0x1ffae9,_0x51e159){return _0x3aa215(_0x1ffae9,_0x51e159);},'AZtVM':function(_0xc6d055,_0x2b2c6a){return _0xc6d055*_0x2b2c6a;},'XCDhL':_0x52e16c(0x174),'reluA':_0x52e16c(0xf2)+'y','dLNEY':_0x52e16c(0x11f),'pdWIz':_0x52e16c(0x158),'QBNjl':_0x52e16c(0x20b),'aZArR':_0x52e16c(0x1d1),'PejLh':_0x52e16c(0x211)+_0x52e16c(0x92)+_0x52e16c(0x13c)+_0x52e16c(0x16b)},_0x21f97f=document[_0x52e16c(0x204)+_0x52e16c(0x1a9)](_0x54b094[_0x52e16c(0xfb)]),_0x37ca6f=document[_0x52e16c(0x204)+_0x52e16c(0x1a9)](_0x54b094[_0x52e16c(0x114)]),_0xe13c95=document[_0x52e16c(0x204)+_0x52e16c(0x1a9)](_0x54b094[_0x52e16c(0x1d3)]),_0x9b07a4=document[_0x52e16c(0x204)+_0x52e16c(0x1a9)](_0x54b094[_0x52e16c(0x1de)]);_0x21f97f[_0x52e16c(0x1d0)][_0x52e16c(0x1ce)]=_0x54b094[_0x52e16c(0x1a8)],_0x37ca6f[_0x52e16c(0x15b)]='',_0xe13c95[_0x52e16c(0x15b)]='',_0x9b07a4[_0x52e16c(0x15b)]='';if(!_0xd1ed9d){_0xe13c95[_0x52e16c(0x15b)]=_0x52e16c(0x1a4)+_0x52e16c(0x18b)+_0x52e16c(0x161)+_0x52e16c(0x184)+_0x52e16c(0x8c)+_0x314c2d+_0x52e16c(0xb1);return;}const _0x34c255=[{'id':_0x54b094[_0x52e16c(0xe0)],'name':_0x54b094[_0x52e16c(0xd1)],'element':_0x54b094[_0x52e16c(0x1cf)],'img':flinsImg},..._0xd1ed9d];_0x34c255[_0x52e16c(0xe5)]((_0x213c3e,_0x40af6d)=>{const _0x5167aa=_0x52e16c,_0x958230=_0x54b094[_0x5167aa(0x101)](_0x213c3e[_0x5167aa(0xea)],_0x54b094[_0x5167aa(0x1cf)])?_0x54b094[_0x5167aa(0xbc)]:_0x54b094[_0x5167aa(0x101)](_0x213c3e[_0x5167aa(0xea)],_0x54b094[_0x5167aa(0x177)])?_0x54b094[_0x5167aa(0xa8)]:_0x54b094[_0x5167aa(0x1aa)](_0x213c3e[_0x5167aa(0xea)],_0x54b094[_0x5167aa(0x17e)])?_0x54b094[_0x5167aa(0x13d)]:_0x54b094[_0x5167aa(0x110)],_0x1c9491=document[_0x5167aa(0x13e)+_0x5167aa(0xb8)](_0x54b094[_0x5167aa(0x1ea)]);_0x1c9491[_0x5167aa(0x15d)]=_0x54b094[_0x5167aa(0xf8)],_0x1c9491[_0x5167aa(0x15b)]=_0x5167aa(0x1a0)+_0x5167aa(0x156)+_0x5167aa(0xba)+_0x213c3e[_0x5167aa(0x159)]+(_0x5167aa(0x1bb)+_0x5167aa(0x1a5)+_0x5167aa(0xb2)+_0x5167aa(0x1d5)+':')+_0x958230+(_0x5167aa(0x1b3)+_0x5167aa(0x7a)+_0x5167aa(0x13b)+_0x5167aa(0xe9)+_0x5167aa(0x1eb)+_0x5167aa(0x208)+_0x5167aa(0x18e))+_0x213c3e[_0x5167aa(0x14c)][-0xfcb+-0x2072+0x303d*0x1]+(_0x5167aa(0x15c)+_0x5167aa(0x209)+_0x5167aa(0xd2)+_0x5167aa(0x18a))+_0x213c3e[_0x5167aa(0x14c)]+(_0x5167aa(0x12c)+_0x5167aa(0x1b8)),_0x37ca6f[_0x5167aa(0x1fe)+'d'](_0x1c9491);if(_0x54b094[_0x5167aa(0x1aa)](_0x213c3e['id'],_0x54b094[_0x5167aa(0xe0)]))_0x1c9491[_0x5167aa(0x1d0)][_0x5167aa(0x16a)]='1';else{const _0x3636b6=document[_0x5167aa(0x204)+_0x5167aa(0x1a9)](_0x5167aa(0x1db)+_0x213c3e['id']),_0x1ebb76=_0x3636b6[_0x5167aa(0x15e)+_0x5167aa(0xdd)+'t'](),_0x27f445=_0x1c9491[_0x5167aa(0x15e)+_0x5167aa(0xdd)+'t'](),_0x3c2cde=_0x54b094[_0x5167aa(0x10e)](_0x1ebb76[_0x5167aa(0x140)],_0x27f445[_0x5167aa(0x140)]),_0x408db5=_0x54b094[_0x5167aa(0x8f)](_0x1ebb76[_0x5167aa(0x189)],_0x27f445[_0x5167aa(0x189)]);_0x1c9491[_0x5167aa(0x1d0)][_0x5167aa(0x206)+'y'](_0x54b094[_0x5167aa(0x182)],_0x3c2cde+'px'),_0x1c9491[_0x5167aa(0x1d0)][_0x5167aa(0x206)+'y'](_0x54b094[_0x5167aa(0x1b6)],_0x408db5+'px'),_0x54b094[_0x5167aa(0x1ac)](setTimeout,()=>_0x1c9491[_0x5167aa(0x8a)][_0x5167aa(0x7c)](_0x5167aa(0x79)),_0x54b094[_0x5167aa(0x15f)](_0x40af6d,0x33b+-0x2070+0x1d99));}});let _0x29da0d=_0x54b094[_0x52e16c(0x163)];_0x29da0d+=_0x52e16c(0x1a4)+_0x52e16c(0x202)+_0x52e16c(0x146)+_0x52e16c(0x1e5)+_0x52e16c(0xdc)+_0x52e16c(0x1b0)+_0x52e16c(0xc1)+_0x52e16c(0xfa)+_0x52e16c(0x1cb)+_0x52e16c(0x1f4)+_0x52e16c(0x148)+_0x52e16c(0xcf)+_0x52e16c(0x1e3)+_0x52e16c(0xac)+_0x52e16c(0x98)+_0x52e16c(0x176)+_0x52e16c(0x154)+_0x52e16c(0x14a)+_0x52e16c(0xb1),_0xd1ed9d[_0x52e16c(0x142)](_0x47bb7f=>_0x47bb7f['id']===_0x52e16c(0x113))&&(_0x29da0d+=_0x52e16c(0x1a4)+_0x52e16c(0x202)+_0x52e16c(0x1e9)+_0x52e16c(0xed)+_0x52e16c(0x198)+_0x52e16c(0x1b4)+_0x52e16c(0x1cd)+_0x52e16c(0xf0)+_0x52e16c(0xf6)+_0x52e16c(0xc4)+_0x52e16c(0x7f)+_0x52e16c(0x10d)+_0x52e16c(0x1f2)+_0x52e16c(0x17d)+_0x52e16c(0x11b)+_0x52e16c(0x1c7)),_0xd1ed9d[_0x52e16c(0x142)](_0x489c61=>_0x489c61['id']===_0x52e16c(0x167))&&(_0x29da0d+=_0x52e16c(0x1a4)+_0x52e16c(0x202)+_0x52e16c(0x1ef)+_0x52e16c(0x9a)+_0x52e16c(0x9b)+_0x52e16c(0x201)+_0x52e16c(0x19c)+_0x52e16c(0x87)+_0x52e16c(0x20e)+_0x52e16c(0x162)+_0x52e16c(0x1ee)+_0x52e16c(0x10c)+_0x52e16c(0x197)+_0x52e16c(0xa5)+_0x52e16c(0x14b)+_0x52e16c(0x82)+_0x52e16c(0xa3)+_0x52e16c(0x93)+_0x52e16c(0x173)+_0x52e16c(0x105)+_0x52e16c(0x8b)+_0x52e16c(0x126)+_0x52e16c(0x85)+_0x52e16c(0xa7)+_0x52e16c(0x1b5)+_0x52e16c(0x1e1)+_0x52e16c(0x14d)),_0xd1ed9d[_0x52e16c(0x142)](_0x1e3f71=>_0x1e3f71['id']===_0x52e16c(0xbf))&&(_0x29da0d+=_0x52e16c(0x1a4)+_0x52e16c(0x202)+_0x52e16c(0x17a)+_0x52e16c(0x13f)+_0x52e16c(0x130)+_0x52e16c(0x200)+_0x52e16c(0x155)+_0x52e16c(0x195)+_0x52e16c(0xc3)+_0x52e16c(0x1ff)+_0x52e16c(0x124)+_0x52e16c(0x1e7)+_0x52e16c(0xad)+_0x52e16c(0x186)+_0x52e16c(0x199)+_0x52e16c(0x157)+_0x52e16c(0x139)+_0x52e16c(0x1bf)+_0x52e16c(0x194)),_0xd1ed9d[_0x52e16c(0x142)](_0x44c4fc=>_0x44c4fc['id']===_0x52e16c(0x16c)&&_0x44c4fc[_0x52e16c(0xb6)]==='C6')&&(_0x29da0d+=_0x52e16c(0x1a4)+_0x52e16c(0x202)+_0x52e16c(0x8d)+_0x52e16c(0x180)+_0x52e16c(0x187)+_0x52e16c(0xca)+_0x52e16c(0x17b)+_0x52e16c(0x1af)+_0x52e16c(0x150)+_0x52e16c(0x1f5)+_0x52e16c(0x89)+_0x52e16c(0x207)+_0x52e16c(0xff)+_0x52e16c(0x135)+_0x52e16c(0xfd)+_0x52e16c(0x84)+_0x52e16c(0x14e)+_0x52e16c(0xdf)),_0xd1ed9d[_0x52e16c(0x142)](_0x48ee42=>_0x48ee42['id']===_0x52e16c(0x1d7))&&(_0x29da0d+=_0x52e16c(0x1a4)+_0x52e16c(0x202)+_0x52e16c(0x136)+_0x52e16c(0x10b)+_0x52e16c(0x145)+_0x52e16c(0x11d)+_0x52e16c(0xaf)+_0x52e16c(0x8e)+_0x52e16c(0xe1)+_0x52e16c(0x19b)+_0x52e16c(0x1be)+_0x52e16c(0x18c)+_0x52e16c(0x119)+_0x52e16c(0x16f)+_0x52e16c(0x1c1)+_0x52e16c(0x192)+_0x52e16c(0x11c)+_0x52e16c(0x1f8)+_0x52e16c(0x1e8)),_0xd1ed9d[_0x52e16c(0x142)](_0x1ae798=>_0x1ae798['id']===_0x52e16c(0xe8))&&(_0x29da0d+=_0x52e16c(0x1a4)+_0x52e16c(0x202)+_0x52e16c(0x171)+_0x52e16c(0xf7)+_0x52e16c(0xeb)+_0x52e16c(0x149)+_0x52e16c(0xb0)+_0x52e16c(0x1fd)+_0x52e16c(0x1fc)+_0x52e16c(0xee)+_0x52e16c(0x16d)+_0x52e16c(0x11e)+_0x52e16c(0xcc)+_0x52e16c(0x1b2)+_0x52e16c(0x1c2)+_0x52e16c(0x1ec)+_0x52e16c(0x115)+_0x52e16c(0x83)+_0x52e16c(0x1bd)),_0x9b07a4[_0x52e16c(0x15b)]=_0x29da0d;}function updateCounter(_0x3a743c=![]){const _0x3ff80b=_0x4add5c,_0x3e9ce3={'jzopj':_0x3ff80b(0xda)+'or','TOsxZ':_0x3ff80b(0x181)+_0x3ff80b(0xbb),'LZDvi':_0x3ff80b(0x210)+_0x3ff80b(0x1e6),'gROal':_0x3ff80b(0x1df)+_0x3ff80b(0x125),'dtEJZ':function(_0x1f4067,_0x10fcd3){return _0x1f4067(_0x10fcd3);},'QLhbf':_0x3ff80b(0x9d)},_0x8d3bf2=document[_0x3ff80b(0x204)+_0x3ff80b(0x1a9)](_0x3e9ce3[_0x3ff80b(0xde)]),_0x1c6069=_0x3e9ce3[_0x3ff80b(0x12f)],_0x8c81d3=_0x3e9ce3[_0x3ff80b(0x9f)];_0x3e9ce3[_0x3ff80b(0x141)](fetch,_0x3ff80b(0x97)+_0x3ff80b(0x15a)+_0x3ff80b(0x138)+_0x1c6069+'/'+_0x8c81d3+(_0x3a743c?_0x3e9ce3[_0x3ff80b(0xfc)]:''))[_0x3ff80b(0x118)](_0x2d81fd=>_0x2d81fd[_0x3ff80b(0x91)]())[_0x3ff80b(0x118)](_0x40d2e3=>{const _0x37738f=_0x3ff80b;if(_0x8d3bf2)_0x8d3bf2[_0x37738f(0x116)]=(_0x3a743c?_0x40d2e3[_0x37738f(0xb9)]:_0x40d2e3[_0x37738f(0x100)])[_0x37738f(0x1a3)+_0x37738f(0x190)]();})[_0x3ff80b(0x1c9)](()=>{const _0x3a3414=_0x3ff80b;if(_0x8d3bf2)_0x8d3bf2[_0x3a3414(0x116)]=_0x3e9ce3[_0x3a3414(0x14f)];});}init();
+</script>
+</body>
+</html>
